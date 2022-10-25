@@ -1,0 +1,119 @@
+#include<iostream>
+#include<vector>
+#define MAX 16
+using namespace std;
+int m;
+int runCombi = 1;
+int ans = 0;
+int Calculate(vector<int>t, int cc[][3], int reqC[]) {
+	m = 0;
+	int s = t.size();
+	int tc[3]={0};
+	for (int i = 0; i < s; i++) {
+		//cout << "comb" << t[i] << "   ";
+		for (int j = 0; j < 3; j++) {
+			tc[j] += cc[t[i]-1][j];
+		}
+	}
+	//cout << endl;
+	for (int j = 0; j < 3; j++) {
+		tc[j] = tc[j] / s;
+		//cout << "gen Col" << tc[j] << "  " << reqC[j] << endl;
+		if (tc[j] == reqC[j]) {
+			
+			m++;
+		}
+		
+	}
+	if (m == 3) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+	//cout << "----------------------------" << endl;
+}
+void combiHelper(int a[],int N, int reqL, int index, int currL,int sel[], int cc[][3], int reqC[]) {
+	if (runCombi) {
+		if (currL == reqL) {
+			vector<int> temp;
+			for (int i = 0; i < N; i++) {
+				if (sel[i]) {
+					temp.push_back(a[i]);
+				}
+			}
+			int t=Calculate(temp, cc, reqC);
+			if (t == 1) {
+				runCombi = 0;
+				ans = temp.size();
+			}
+			return;
+		}
+		else if (currL > reqL) {
+			return;
+		}
+		if (index == N) {
+			return;
+		}
+		else {
+			sel[index] = 1;
+			combiHelper(a, N, reqL, index + 1, currL + 1, sel, cc, reqC);
+			sel[index] = 0;
+			combiHelper(a, N, reqL, index + 1, currL, sel, cc, reqC);
+
+		}
+	}
+}
+int main() {
+	m=0;
+	runCombi = 1;
+	ans = 0;
+	int sel[MAX] = {-1 };
+	int a[MAX] = { 0 };
+	int n;
+	cin >> n ;
+	long long int x;
+	long long int y;
+	cin >> x;
+	int c1[6];
+	int c1f[3];
+	int c2[MAX][6];
+	int c2f[MAX][3];
+	for (int i = 0; i < 6; i++) {
+		c1[i] = x % 16;
+		x = x / 16;
+	}
+	//---to RGB---//
+	for (int l = 0; l < 3; l++) {
+		c1f[l] = c1[2 * l] + 16 * c1[2 * l + 1];
+	}
+	
+	for (int i = 0; i < n; i++) {
+		sel[i] = 0;
+		a[i] = i + 1;
+		cin >> y;
+		for (int j= 0; j < 6; j++) {
+			c2[i][j] = y % 16;
+			y = y / 16;
+		}
+	}
+	//----------toRGB------//
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < 3; j++) {
+			c2f[i][j] = c2[i][2 * j] +16* c2[i][2 * j + 1];
+			
+		}
+	}
+	//cout << "#########################" << endl;
+	for (int k = 1; k <= n; k++) {
+		combiHelper(a, n, k, 0, 0, sel, c2f, c1f);
+		
+		
+	}
+	if (runCombi) {
+		cout << "-1" << endl;
+	}
+	else {
+		cout << ans << endl;
+	}
+}
