@@ -5,6 +5,7 @@ using namespace std;
 int m;
 int runCombi = 1;
 int ans = 0;
+#returns whether a combination is possible or not
 int Calculate(vector<int>t, int cc[][3], int reqC[]) {
 	m = 0;
 	int s = t.size();
@@ -33,6 +34,7 @@ int Calculate(vector<int>t, int cc[][3], int reqC[]) {
 	}
 	//cout << "----------------------------" << endl;
 }
+#finds all combinations
 void combiHelper(int a[],int N, int reqL, int index, int currL,int sel[], int cc[][3], int reqC[]) {
 	if (runCombi) {
 		if (currL == reqL) {
